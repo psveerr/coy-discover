@@ -5,13 +5,12 @@ const THRESHOLD = 100; // pixels you must drag before it counts as a swipe
 export default function Card({ profile, onSwipe }) {
   const [dx, setDx] = useState(0);
   const [startX, setStartX] = useState(null);
-  const [leaving, setLeaving] = useState(false);
+  const [leaving, setLeaving] = useState(null); // "like" or "pass" while flying off
 
-  // Fly the card off screen, then tell the parent.
+  // Fly the card off screen; onTransitionEnd tells the parent once it is gone.
   function finish(action) {
-    setLeaving(true);
+    setLeaving(action);
     setDx(action === 'like' ? 600 : -600);
-    setTimeout(() => onSwipe(action), 300);
   }
 
   function onPointerDown(e) {
@@ -45,6 +44,7 @@ export default function Card({ profile, onSwipe }) {
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
+        onTransitionEnd={() => leaving && onSwipe(leaving)}
       >
         <img src={profile.photo} alt={profile.name} draggable="false" />
         <span className="stamp like" style={{ opacity: dx / THRESHOLD }}>LIKE</span>

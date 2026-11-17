@@ -6,7 +6,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <main className="screen">{tab === 'home' ? <div className="blank" /> : <Discover />}</main>
+      <main className="screen">{tab === 'discover' && <Discover />}</main>
       <nav className="tabbar">
         <button className={tab === 'home' ? 'active' : ''} onClick={() => setTab('home')}>Home</button>
         <button className={tab === 'discover' ? 'active' : ''} onClick={() => setTab('discover')}>Discover</button>

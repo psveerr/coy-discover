@@ -1,5 +1,6 @@
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
+import { once } from 'node:events';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -11,11 +12,15 @@ const NON_LIKER = '1';
 
 let server, base, file;
 
-beforeEach(async () => {
-  file = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'coy-')), 'swipes.json');
+async function start() {
   server = createApp(file).listen(0);
-  await new Promise((r) => server.once('listening', r));
+  await once(server, 'listening');
   base = `http://localhost:${server.address().port}`;
+}
+
+beforeEach(() => {
+  file = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'coy-')), 'swipes.json');
+  return start();
 });
 
 afterEach(() => server.close());
@@ -67,9 +72,7 @@ test('bad input is rejected', async () => {
 test('swipes and matches survive a restart', async () => {
   await swipe(LIKER, 'like');
   server.close();
-  server = createApp(file).listen(0);
-  await new Promise((r) => server.once('listening', r));
-  base = `http://localhost:${server.address().port}`;
+  await start();
   assert.deepEqual((await get('/matches')).map((p) => p.id), [LIKER]);
   assert.equal((await get('/feed')).length, 29);
 });

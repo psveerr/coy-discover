@@ -39,8 +39,7 @@ export function createApp(dataFile) {
     swipes[profileId] = action;
     fs.writeFileSync(dataFile, JSON.stringify(swipes, null, 2));
 
-    const match = isMatch(profile, swipes);
-    res.json({ match, profile: match ? publicProfile(profile) : undefined });
+    res.json({ match: Boolean(isMatch(profile, swipes)) });
   });
 
   app.get('/matches', (req, res) => {

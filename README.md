@@ -20,7 +20,7 @@ Demo tip: Diya, Vihaan, Meera, Aditya, Myra, Aisha, Riya and Sneha have already 
 | Method | Path | What it does |
 |---|---|---|
 | GET | `/feed` | Profiles you have not swiped on yet |
-| POST | `/swipe` | Body `{ "profileId": "2", "action": "like" \| "pass" }`. Returns `{ "match": true, "profile": {...} }` or `{ "match": false }` |
+| POST | `/swipe` | Body `{ "profileId": "2", "action": "like" \| "pass" }`. Returns `{ "match": true }` or `{ "match": false }` |
 | GET | `/matches` | Profiles where both sides liked each other |
 
 ## Design choices

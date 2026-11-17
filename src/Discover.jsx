@@ -4,8 +4,7 @@ import Card from './Card.jsx';
 export default function Discover() {
   const [feed, setFeed] = useState(null);
   const [match, setMatch] = useState(null);
-  const [showMatches, setShowMatches] = useState(false);
-  const [matches, setMatches] = useState([]);
+  const [matches, setMatches] = useState(null); // null = matches list is closed
 
   useEffect(() => {
     fetch('/feed').then((r) => r.json()).then(setFeed);
@@ -20,20 +19,19 @@ export default function Discover() {
     });
     const body = await res.json();
     setFeed((f) => f.slice(1));
-    if (body.match) setMatch(body.profile);
+    if (body.match) setMatch(profile);
   }
 
   async function openMatches() {
     setMatches(await fetch('/matches').then((r) => r.json()));
-    setShowMatches(true);
   }
 
   if (!feed) return <p className="empty">Loading...</p>;
 
-  if (showMatches) {
+  if (matches) {
     return (
       <div className="matches">
-        <button className="link" onClick={() => setShowMatches(false)}>← Back</button>
+        <button className="link" onClick={() => setMatches(null)}>← Back</button>
         <h2>Matches</h2>
         {matches.length === 0 && <p className="empty">No matches yet. Keep swiping!</p>}
         {matches.map((p) => (
