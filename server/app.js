@@ -28,7 +28,7 @@ export function createApp(dataFile) {
   });
 
   app.post('/swipe', (req, res) => {
-    const { profileId, action } = req.body || {};
+    const { profileId, action } = req.body;
     const profile = profiles.find((p) => p.id === profileId);
     if (!profile) return res.status(404).json({ error: 'Profile not found' });
     if (action !== 'like' && action !== 'pass') {
@@ -37,9 +37,11 @@ export function createApp(dataFile) {
     if (swipes[profileId]) return res.status(409).json({ error: 'Already swiped' });
 
     swipes[profileId] = action;
-    fs.writeFileSync(dataFile, JSON.stringify(swipes, null, 2));
+    // Write then rename: a crash mid-write can't leave a half-written file.
+    fs.writeFileSync(dataFile + '.tmp', JSON.stringify(swipes, null, 2));
+    fs.renameSync(dataFile + '.tmp', dataFile);
 
-    res.json({ match: Boolean(isMatch(profile, swipes)) });
+    res.json({ match: isMatch(profile, swipes) });
   });
 
   app.get('/matches', (req, res) => {

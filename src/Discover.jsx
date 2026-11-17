@@ -12,13 +12,13 @@ export default function Discover() {
 
   async function swipe(action) {
     const profile = feed[0];
+    setFeed((f) => f.slice(1));
     const res = await fetch('/swipe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ profileId: profile.id, action }),
     });
     const body = await res.json();
-    setFeed((f) => f.slice(1));
     if (body.match) setMatch(profile);
   }
 

@@ -10,7 +10,7 @@ export default function Card({ profile, onSwipe }) {
   // Fly the card off screen; onTransitionEnd tells the parent once it is gone.
   function finish(action) {
     setLeaving(action);
-    setDx(action === 'like' ? 600 : -600);
+    setDx((d) => d + (action === 'like' ? 600 : -600)); // always moves, so onTransitionEnd always fires
   }
 
   function onPointerDown(e) {
