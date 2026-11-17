@@ -40,6 +40,6 @@ export const profiles = rows.map(([name, age, city, bio, interests, likedYou], i
   city,
   bio,
   interests,
-  photo: `https://i.pravatar.cc/400?img=${i + 1}`,
+  photo: `/photos/${i + 1}.svg`, // illustrated avatars in public/photos
   likedYou,
 }));

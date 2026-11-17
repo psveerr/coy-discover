@@ -51,10 +51,11 @@ test('passing on someone who liked you is not a match and reveals nothing', asyn
   assert.deepEqual(await get('/matches'), []);
 });
 
-test('feed never says who liked the user', async () => {
+test('feed and matches never say who liked the user', async () => {
+  await swipe(LIKER, 'like');
   const feed = await get('/feed');
-  assert.equal(feed.length, 30);
-  for (const p of feed) assert.equal('likedYou' in p, false);
+  assert.equal(feed.length, 29);
+  for (const p of [...feed, ...(await get('/matches'))]) assert.equal('likedYou' in p, false);
 });
 
 test('a swiped profile leaves the feed and cannot be swiped again', async () => {

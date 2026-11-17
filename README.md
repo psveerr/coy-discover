@@ -4,6 +4,8 @@ A small standalone version of a swipe-to-match "Discover" tab. React (built with
 
 ## Run it
 
+Needs Node.js 20.19 or newer.
+
 ```bash
 npm install   # install
 npm start     # build the frontend and start the server on http://localhost:3000
@@ -26,7 +28,8 @@ Demo tip: Diya, Vihaan, Meera, Aditya, Myra, Aisha, Riya and Sneha have already 
 ## Design choices
 
 - **Small and plain.** Three backend files, three React components, no state library, no database server. The only dependencies are Express, React and Vite.
-- **Profiles are fixed seed data** (`server/profiles.js`, 30 people). Each has a server-only `likedYou` flag that stands in for "this person already swiped right on you".
+- **Profiles are fixed seed data** (`server/profiles.js`, 30 people, ages 20–24). Each has a server-only `likedYou` flag that stands in for "this person already swiped right on you".
+- **Placeholder photos are illustrated avatars**, not photos of real people. A dating app should not put real strangers' faces on fake profiles. Each avatar was picked to match the profile (gender, adult look) and is stored in `public/photos`, so the app works offline and does not depend on another website. Made with [DiceBear](https://www.dicebear.com) using the [Avataaars](https://avataaars.com) design by Pablo Stanley (free for personal and commercial use).
 - **Only swipes are stored** (`data/swipes.json`, e.g. `{"2":"like","5":"pass"}`). Matches are not stored separately. They are worked out from the swipes plus `likedYou`, so they can never get out of sync. Because the swipes are on disk, both the swipes and the matches survive reloads and restarts.
 - **Privacy is enforced on the server.** Every profile goes through `publicProfile()` before it leaves the server, and that function copies only the public fields, so `likedYou` can never be sent. The only time the server says someone liked you is in the `/swipe` reply or `/matches`, and only when you have liked them too (a mutual match).
 - **The feed order is fixed** (seed order), and the people who liked you are spread through it, so their position doesn't give anything away.

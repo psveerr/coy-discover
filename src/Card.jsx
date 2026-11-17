@@ -47,8 +47,8 @@ export default function Card({ profile, onSwipe }) {
         onTransitionEnd={() => leaving && onSwipe(leaving)}
       >
         <img src={profile.photo} alt={profile.name} draggable="false" />
-        <span className="stamp like" style={{ opacity: dx / THRESHOLD }}>LIKE</span>
-        <span className="stamp nope" style={{ opacity: -dx / THRESHOLD }}>NOPE</span>
+        <span className="stamp like" aria-hidden="true" style={{ opacity: dx / THRESHOLD }}>LIKE</span>
+        <span className="stamp nope" aria-hidden="true" style={{ opacity: -dx / THRESHOLD }}>NOPE</span>
         <div className="info">
           <h2>{profile.name}, {profile.age}</h2>
           <p className="city">{profile.city}</p>
